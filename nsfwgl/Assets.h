@@ -79,7 +79,7 @@ namespace nsfw
 	{
 	private:
 		// Hashing functor object for accepting pair<enum,string> as an index.
-		struct Hash { size_t operator()(AssetKey k) const { return std::hash<std::string>()(k.second) + (unsigned)k.first; } };
+		struct Hash { size_t operator()(AssetKey k) const { return std::hash<std::string>()(k.second += (unsigned)k.first); } };
 		
 		// Store all of our keys in one place!
 		std::unordered_map<AssetKey, GL_HANDLE, Hash> handles;
@@ -87,7 +87,7 @@ namespace nsfw
 
 		GL_HANDLE getVERIFIED(const AssetKey &key) const;
 
-		bool setINTERNAL(ASSET::GL_HANDLE_TYPE t, char *name, GL_HANDLE handle);
+		bool setINTERNAL(ASSET::GL_HANDLE_TYPE t,const char *name, GL_HANDLE handle);
 	public:
 		// Singleton accessor
 		static Assets &instance() { static Assets a; return a; }

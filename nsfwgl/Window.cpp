@@ -1,5 +1,7 @@
-#include "nsfw.h"
 #include <inc\gl_core_4_4.h>
+#include <inc\GLFW\glfw3.h>
+#include "nsfw.h"
+
 
 void nsfw::Window::init(unsigned width, unsigned height)
 {
@@ -8,10 +10,10 @@ void nsfw::Window::init(unsigned width, unsigned height)
 	bool success = glfwInit();
 	if (!success)
 	{
-		std::cout << "error inititalizing GLFW\n";
+		std::cout << "error inititalizing GLFW\n"; 
 		return;
 	}
-	window = glfwCreateWindow(width, height, "NSFWGL Window", nullptr, nullptr);
+	window = glfwCreateWindow(width, height, "NSFWGL", nullptr, nullptr);
 
 	if(window == nullptr)
 	{
@@ -21,21 +23,27 @@ void nsfw::Window::init(unsigned width, unsigned height)
 
 	glfwMakeContextCurrent(window);
 
-	if (ogl_loadFunctions() == ogl_LOAD_Failed)
+	
+	if (ogl_LoadFunctions() == ogl_LOAD_FAILED)
 	{
-
+		std::cout << "Error loading ogl\n";
+		delete window;
+		return;
 	}
-	TODO_D("Should create and set an active windowing context. ONLY GLFW! No GL!");
+	//TODO_D("Should create and set an active windowing context. ONLY GLFW! No GL!");
 }
 
 void nsfw::Window::step()
 {
-	TODO_D("GLFW poll events and swap buffers is all that should really be here! No GL!");
+	glfwSwapBuffers(window);
+	glfwPollEvents();
 }
 
 void nsfw::Window::term()
 {
-	TODO();
+	glfwDestroyWindow(window);
+	glfwTerminate();
+	//TODO();
 }
 
 float nsfw::Window::getTime() const
@@ -50,7 +58,7 @@ bool nsfw::Window::getKey(unsigned k) const
 
 bool nsfw::Window::getShouldClose() const
 {
-	return glfwWindowShouldClose(window);
+	return glfwWindowShouldClose(window) == true || glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS;
 }
 
 unsigned nsfw::Window::getWidth() const

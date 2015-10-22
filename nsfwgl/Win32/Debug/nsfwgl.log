@@ -1,11 +1,19 @@
-﻿Build started 10/9/2015 4:16:08 PM.
+﻿Build started 10/22/2015 2:00:39 PM.
      1>Project "C:\Users\adrian.caple\Documents\GitHub\nsfwgl-master\nsfwgl\nsfwgl.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /I"C:\Users\adrian.caple\Documents\GitHub\nsfwgl-master\dep" /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Win32\Debug\\" /Fd"Win32\Debug\nsfwgl.pdb" /Gd /TP /analyze- /errorReport:prompt Window.cpp
-         Window.cpp
-     1>c:\users\adrian.caple\documents\github\nsfwgl-master\dep\inc\gl_core_4_4.h(8): fatal error C1189: #error:  Attempt to include auto-generated header after including gl.h
-     1>Done Building Project "C:\Users\adrian.caple\Documents\GitHub\nsfwgl-master\nsfwgl\nsfwgl.vcxproj" (Build target(s)) -- FAILED.
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /I"C:\Users\adrian.caple\Documents\GitHub\nsfwgl-master\dep" /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Win32\Debug\\" /Fd"Win32\Debug\nsfwgl.pdb" /Gd /TP /analyze- /errorReport:prompt Assets.cpp
+         Assets.cpp
+     1>c:\users\adrian.caple\documents\github\nsfwgl-master\nsfwgl\assets.cpp(98): warning C4018: '<': signed/unsigned mismatch
+     1>c:\users\adrian.caple\documents\github\nsfwgl-master\nsfwgl\assets.cpp(204): warning C4838: conversion from 'int' to 'char' requires a narrowing conversion
+     1>c:\users\adrian.caple\documents\github\nsfwgl-master\nsfwgl\assets.cpp(204): warning C4309: 'initializing': truncation of constant value
+       Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\Lib.exe /OUT:"C:\Users\adrian.caple\Documents\GitHub\nsfwgl-master\Win32\Debug\nsfwgl.lib" glfw3.lib opengl32.lib /LIBPATH:"C:\Users\adrian.caple\Documents\GitHub\nsfwgl-master\/dep/GLFW/" /NOLOGO Win32\Debug\Assets.obj
+         Win32\Debug\gl_core_4_4.obj
+         Win32\Debug\render.obj
+         Win32\Debug\Window.obj
+         nsfwgl.vcxproj -> C:\Users\adrian.caple\Documents\GitHub\nsfwgl-master\Win32\Debug\nsfwgl.lib
+     1>Done Building Project "C:\Users\adrian.caple\Documents\GitHub\nsfwgl-master\nsfwgl\nsfwgl.vcxproj" (Build target(s)).
 
-Build FAILED.
+Build succeeded.
 
-Time Elapsed 00:00:02.78
+Time Elapsed 00:00:04.51

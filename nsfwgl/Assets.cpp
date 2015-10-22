@@ -1,4 +1,7 @@
+#include <inc\gl_core_4_4.h>
 #include "nsfw.h"
+#include <iostream>
+#include <fstream>
 
 using namespace nsfw::ASSET;
 
@@ -23,7 +26,7 @@ nsfw::GL_HANDLE nsfw::Assets::getVERIFIED(const AssetKey &key) const
 			return handles.at(key);
 }
 
-bool nsfw::Assets::setINTERNAL(ASSET::GL_HANDLE_TYPE t, char *name, GL_HANDLE handle)
+bool nsfw::Assets::setINTERNAL(ASSET::GL_HANDLE_TYPE t,const char *name, GL_HANDLE handle)
 {
 	AssetKey key(t, name);
 #ifdef _DEBUG
@@ -45,6 +48,40 @@ bool nsfw::Assets::makeVAO(const char * name, const struct Vertex *verts, unsign
 	ASSET_LOG(GL_HANDLE_TYPE::IBO);
 	ASSET_LOG(GL_HANDLE_TYPE::VAO);
 	ASSET_LOG(GL_HANDLE_TYPE::SIZE);
+
+	unsigned int vbo, ibo, vao, size = tsize;
+	
+
+	glGenVertexArrays(1, &vao);
+	glGenBuffers(1, &vbo);
+	glGenBuffers(1, &ibo);
+
+	glBindVertexArray(vao);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+
+	glBufferData(GL_ARRAY_BUFFER, vsize * sizeof(Vertex), verts, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, size * sizeof(unsigned), tris, GL_STATIC_DRAW);
+
+	glEnableVertexAttribArray(0); //position
+	glEnableVertexAttribArray(1); //noraml
+	glEnableVertexAttribArray(2); //tangent
+	glEnableVertexAttribArray(3); // texCoord
+
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)Vertex::POSITION);
+	glVertexAttribPointer(1, 4, GL_FLOAT, GL_TRUE,  sizeof(Vertex), (void*)Vertex::NORMAL);
+	glVertexAttribPointer(2, 4, GL_FLOAT, GL_TRUE,  sizeof(Vertex), (void*)Vertex::TANGENT);
+	glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)Vertex::TEXCOORD);
+
+	glBindVertexArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+	setINTERNAL(GL_HANDLE_TYPE::VBO,  name, vbo);
+	setINTERNAL(GL_HANDLE_TYPE::IBO,  name, ibo);
+	setINTERNAL(GL_HANDLE_TYPE::VAO,  name, vao);
+	setINTERNAL(GL_HANDLE_TYPE::SIZE, name, size);
+
 	TODO_D("Should generate VBO, IBO, VAO, and SIZE using the parameters, storing them in the 'handles' map.\nThis is where vertex attributes are set!");
 	return false;
 }
@@ -52,15 +89,51 @@ bool nsfw::Assets::makeVAO(const char * name, const struct Vertex *verts, unsign
 bool nsfw::Assets::makeFBO(const char * name, unsigned w, unsigned h, unsigned nTextures, const char * names[], const unsigned depths[])
 {
 	ASSET_LOG(GL_HANDLE_TYPE::FBO);
-	TODO_D("Create an FBO! Array parameters are for the render targets, which this function should also generate!\nuse makeTexture.\nNOTE THAT THERE IS NO FUNCTION SETUP FOR MAKING RENDER BUFFER OBJECTS.");
-	return false;
+	unsigned int fbo;
+	glGenFramebuffers(1, &fbo);
+	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+	int nColors = 0;
+
+	for (int i = 0; i < nTextures; i++)
+	{
+		makeTexture(names[i], w, h, depths[i]);
+
+		unsigned attachment;
+		if      (depths[i] == GL_DEPTH_COMPONENT)    attachment = GL_DEPTH_ATTACHMENT;
+		else if (depths[i] == GL_STENCIL_ATTACHMENT) attachment = GL_STENCIL_ATTACHMENT;
+		else		/*is a color!*/					 attachment = GL_COLOR_ATTACHMENT0 + nColors++;
+
+
+		glFramebufferTexture(GL_FRAMEBUFFER, attachment, get<TEXTURE>(names[i]), 0);
+	}
+
+	unsigned *colorAttachments = new unsigned[nColors];
+	for (int i = 0; i < nColors; i++) colorAttachments[i] = GL_COLOR_ATTACHMENT0 + i;
+	glDrawBuffers(nColors, colorAttachments);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	setINTERNAL(GL_HANDLE_TYPE::FBO, name, fbo);
+	return true;
 }
 
 bool nsfw::Assets::makeTexture(const char * name, unsigned w, unsigned h, unsigned depth, const char *pixels)
 {
 	ASSET_LOG(GL_HANDLE_TYPE::TEXTURE);
-	TODO_D("Allocate a texture using the given space/dimensions. Should work if 'pixels' is null, so that you can use this same function with makeFBO\n note that Dept will use a GL value.");
-	return false;
+	unsigned int texture;
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, depth, w, h, 0, depth, GL_UNSIGNED_BYTE, pixels);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+	setINTERNAL(GL_HANDLE_TYPE::TEXTURE, name, texture);
+	return true;
 }
 
 bool nsfw::Assets::loadTexture(const char * name, const char * path)
@@ -72,8 +145,39 @@ bool nsfw::Assets::loadTexture(const char * name, const char * path)
 bool nsfw::Assets::loadShader(const char * name, const char * vpath, const char * fpath)
 {
 	ASSET_LOG(GL_HANDLE_TYPE::SHADER);
-	TODO_D("Load shader from a file.");
-	return false;
+	GLuint shader = glCreateProgram();
+
+	std::ifstream vin(vpath);
+
+	std::string vcontents = std::string(
+		std::istreambuf_iterator<char>(vin),
+		std::istreambuf_iterator<char>());
+
+	std::ifstream fin(fpath);
+	std::string fcontents = std::string(
+		std::istreambuf_iterator<char>(fin),
+		std::istreambuf_iterator<char>());
+	
+
+	GLuint vshader = glCreateShader(GL_VERTEX_SHADER);
+	GLuint fshader = glCreateShader(GL_FRAGMENT_SHADER);
+
+	glShaderSource(vshader, 1, (const char**)vcontents.c_str(), 0);
+	glShaderSource(fshader, 1, (const char**)fcontents.c_str(), 0);
+
+	glCompileShader(vshader);
+	glCompileShader(fshader);
+
+	glAttachShader(shader, vshader);
+	glAttachShader(shader, fshader);
+
+	glLinkProgram(shader);
+	
+	glDeleteShader(vshader);
+	glDeleteShader(fshader);
+	
+	setINTERNAL(GL_HANDLE_TYPE::SHADER, name, shader);
+	return true;
 }
 
 bool nsfw::Assets::loadFBX(const char * name, const char * path)
@@ -92,33 +196,31 @@ bool nsfw::Assets::loadOBJ(const char * name, const char * path)
 
 void nsfw::Assets::init()
 {
-	TODO_D("Load up some default assets here if you want.");
+	setINTERNAL(FBO, "Screen", 0);
 	
-	setINTERNAL(FBO,"Screen",0);
+	makeVAO("Cube", CubeVerts,24, CubeTris,36);
+	makeVAO("Quad", QuadVerts, 4, QuadTris, 6);
 	
-	makeVAO("Cube",CubeVerts,24,CubeTris,36);
-	makeVAO("Quad",QuadVerts, 4, QuadTris,6);
-	/*
-	char w[] = { 255,255,255,255 };
-	makeTexture("White", 1, 1, GL_RGB8, w);
-	*/
+	char w[] = { 255, 0,255,255 };
+	makeTexture("Magenta", 1, 1, GL_RGBA, w);
 
 }
 
 void nsfw::Assets::term()
 {
-	TODO();
+
 	for each(std::pair<AssetKey,unsigned> k in handles)
 	{
+		GLuint handle = k.second;
+
 		switch (k.first.first)
 		{
-		case VBO:		TODO_D("VBO deletion");		break;
-		case IBO:		TODO_D("IBO deletion");		break;
-		case VAO:		TODO_D("VAO deletion");		break;
-		case SHADER:	TODO_D("Shader deletion");	break;
-		case TEXTURE:	TODO_D("Texture deletion"); break;
-		case RBO:		TODO_D("RBO deletion");		break;
-		case FBO:		TODO_D("FBO deletion");		break;
+		case VBO:     glDeleteBuffers(1, &handle);		break;
+		case IBO:     glDeleteBuffers(1, &handle);		break;
+		case VAO:     glDeleteVertexArrays(1, &handle);	break;
+		case SHADER:  glDeleteProgram(handle);		    break;
+		case TEXTURE: glDeleteTextures(1, &handle);     break;
+		case FBO:     glDeleteFramebuffers(1, &handle); break;
 		}
 	}
 }

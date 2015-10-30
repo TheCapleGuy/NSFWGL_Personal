@@ -1,19 +1,30 @@
-﻿Build started 10/22/2015 2:00:39 PM.
-     1>Project "C:\Users\adrian.caple\Documents\GitHub\nsfwgl-master\nsfwgl\nsfwgl.vcxproj" on node 2 (Build target(s)).
+﻿Build started 10/22/2015 2:10:39 PM.
+     1>Project "C:\Users\adrian.caple\Documents\GitHub\NSFWGL_Personal\nsfwgl\nsfwgl.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /I"C:\Users\adrian.caple\Documents\GitHub\nsfwgl-master\dep" /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Win32\Debug\\" /Fd"Win32\Debug\nsfwgl.pdb" /Gd /TP /analyze- /errorReport:prompt Assets.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /IC:\Users\adrian.caple\Documents\GitHub\NSFWGL_Personal\dep /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Win32\Debug\\" /Fd"Win32\Debug\nsfwgl.pdb" /Gd /TP /analyze- /errorReport:prompt Assets.cpp render.cpp Window.cpp
+         Window.cpp
+     1>c:\users\adrian.caple\documents\github\nsfwgl_personal\nsfwgl\window.cpp(10): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+     1>c:\users\adrian.caple\documents\github\nsfwgl_personal\nsfwgl\window.cpp(30): warning C4150: deletion of pointer to incomplete type 'GLFWwindow'; no destructor called
+         c:\users\adrian.caple\documents\github\nsfwgl_personal\nsfwgl\window.h(15): note: see declaration of 'GLFWwindow'
+     1>c:\users\adrian.caple\documents\github\nsfwgl_personal\nsfwgl\window.cpp(51): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+     1>c:\users\adrian.caple\documents\github\nsfwgl_personal\nsfwgl\window.cpp(56): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+     1>c:\users\adrian.caple\documents\github\nsfwgl_personal\nsfwgl\window.cpp(61): warning C4805: '==': unsafe mix of type 'int' and type 'bool' in operation
+         render.cpp
          Assets.cpp
-     1>c:\users\adrian.caple\documents\github\nsfwgl-master\nsfwgl\assets.cpp(98): warning C4018: '<': signed/unsigned mismatch
-     1>c:\users\adrian.caple\documents\github\nsfwgl-master\nsfwgl\assets.cpp(204): warning C4838: conversion from 'int' to 'char' requires a narrowing conversion
-     1>c:\users\adrian.caple\documents\github\nsfwgl-master\nsfwgl\assets.cpp(204): warning C4309: 'initializing': truncation of constant value
+     1>c:\users\adrian.caple\documents\github\nsfwgl_personal\nsfwgl\assets.cpp(98): warning C4018: '<': signed/unsigned mismatch
+     1>c:\users\adrian.caple\documents\github\nsfwgl_personal\nsfwgl\assets.cpp(204): warning C4838: conversion from 'int' to 'char' requires a narrowing conversion
+     1>c:\users\adrian.caple\documents\github\nsfwgl_personal\nsfwgl\assets.cpp(204): warning C4309: 'initializing': truncation of constant value
+         Generating Code...
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /IC:\Users\adrian.caple\Documents\GitHub\NSFWGL_Personal\dep /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Win32\Debug\\" /Fd"Win32\Debug\nsfwgl.pdb" /Gd /TC /analyze- /errorReport:prompt gl_core_4_4.c
+         gl_core_4_4.c
        Lib:
-         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\Lib.exe /OUT:"C:\Users\adrian.caple\Documents\GitHub\nsfwgl-master\Win32\Debug\nsfwgl.lib" glfw3.lib opengl32.lib /LIBPATH:"C:\Users\adrian.caple\Documents\GitHub\nsfwgl-master\/dep/GLFW/" /NOLOGO Win32\Debug\Assets.obj
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\Lib.exe /OUT:"C:\Users\adrian.caple\Documents\GitHub\NSFWGL_Personal\Win32\Debug\nsfwgl.lib" glfw3.lib opengl32.lib /LIBPATH:C:\Users\adrian.caple\Documents\GitHub\NSFWGL_Personal\/dep/GLFW/ /NOLOGO Win32\Debug\Assets.obj
          Win32\Debug\gl_core_4_4.obj
          Win32\Debug\render.obj
          Win32\Debug\Window.obj
-         nsfwgl.vcxproj -> C:\Users\adrian.caple\Documents\GitHub\nsfwgl-master\Win32\Debug\nsfwgl.lib
-     1>Done Building Project "C:\Users\adrian.caple\Documents\GitHub\nsfwgl-master\nsfwgl\nsfwgl.vcxproj" (Build target(s)).
+         nsfwgl.vcxproj -> C:\Users\adrian.caple\Documents\GitHub\NSFWGL_Personal\Win32\Debug\nsfwgl.lib
+     1>Done Building Project "C:\Users\adrian.caple\Documents\GitHub\NSFWGL_Personal\nsfwgl\nsfwgl.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:04.51
+Time Elapsed 00:00:13.35

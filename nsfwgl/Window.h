@@ -9,8 +9,7 @@ This class should ONLY use GLFW!
 No OpenGL!!!
 *****************/
 
-#include <glm/glm.hpp>
-#include <inc/GLFW/glfw3.h>
+#include <glm\glm.hpp>
 
 struct GLFWwindow;
 

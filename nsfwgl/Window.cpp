@@ -1,5 +1,5 @@
-#include <inc\gl_core_4_4.h>
-#include <inc\GLFW\glfw3.h>
+#include <ogl\gl_core_4_4.h>
+#include <glfw\glfw3.h>
 #include "nsfw.h"
 
 

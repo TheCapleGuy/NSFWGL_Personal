@@ -128,13 +128,16 @@
     <ClCompile Include="ForwardPass.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MyTestApp.cpp" />
+    <ClCompile Include="ShadowPass.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CompositePass.h" />
     <ClInclude Include="ForwardPass.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="Lights.h" />
     <ClInclude Include="MyTestApp.h" />
+    <ClInclude Include="ShadowPass.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

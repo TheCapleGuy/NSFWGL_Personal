@@ -3,7 +3,8 @@
 #include "Camera.h"
 #include "GameObject.h"
 #include "ForwardPass.h"
-//#include "CompositePass.h"
+#include "ShadowPass.h"
+#include "Lights.h"
 #include <nsfw.h>
 
 class MyTestApp : public nsfw::Application
@@ -11,8 +12,9 @@ class MyTestApp : public nsfw::Application
 	Camera camera;
 	GameObject obj;
 	GameObject plane;
-
+	DirectionalLight dLight;
 	ForwardPass fp;
+	ShadowPass sp;
 
 public:
 	void onInit();

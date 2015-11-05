@@ -1,10 +1,8 @@
 #include <ogl\gl_core_4_4.h>
 #include "glm/glm.hpp"
 #include "glm/ext.hpp"
+#include"MyTestApp.h"
 
-#include "ForwardPass.h"
-#include "Camera.h"
-#include "GameObject.h"
 
 void ForwardPass::prep()
 {
@@ -19,6 +17,20 @@ void ForwardPass::prep()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
+void ForwardPass::onPrep(const DirectionalLight &dLight)
+{
+	glm::mat4 textureSpaceOffset(
+		0.5f, 0.0f, 0.0f, 0.0f,
+		0.0f, 0.5f, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.5f, 0.0f,
+		0.5f, 0.5f, 0.5f, 1.0f
+		);
+	//lights
+	setUniform("dLColor", nsfw::UNIFORM::FLO3, &(dLight.color));
+	setUniform("dLDirection", nsfw::UNIFORM::FLO3, &(dLight.direction));
+	setUniform("lightMatrix", nsfw::UNIFORM::MAT4, glm::value_ptr(textureSpaceOffset * dLight.getMatrix()));
+}
+
 void ForwardPass::draw(const Camera &c, const GameObject &go)
 {
 	//Camera
@@ -27,8 +39,12 @@ void ForwardPass::draw(const Camera &c, const GameObject &go)
 	//GameObject
 	setUniform("Model", nsfw::UNIFORM::MAT4, glm::value_ptr(go.transform));
 	setUniform("Diffuse", nsfw::UNIFORM::TEX2, &(go.diffuse), 0);
-	setUniform("Specular", nsfw::UNIFORM::TEX2, &(go.diffuse), 1);
-	setUniform("Normal", nsfw::UNIFORM::TEX2, &(go.diffuse), 2);
+	//setUniform("Specular", nsfw::UNIFORM::TEX2, &(go.diffuse), 1);
+	//setUniform("Normal", nsfw::UNIFORM::TEX2, &(go.diffuse), 2);
+
+	nsfw::Asset<nsfw::ASSET::TEXTURE> shadowmap = "FINAL";
+
+	setUniform("ShadowMap", nsfw::UNIFORM::TEX2, &shadowmap, 1);
 
 	glBindVertexArray(*go.mesh);
 	glDrawElements(GL_TRIANGLES, *go.tris, GL_UNSIGNED_INT, 0);

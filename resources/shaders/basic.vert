@@ -5,6 +5,9 @@ layout(location = 3) in vec2 TexCoord;
 
 out vec2 vTexCoord;
 out vec4 vNormal;
+out vec4 vShadowCoord; //uv coordinates to sample the depth map
+
+uniform mat4 lightMatrix;
 
 uniform mat4 Projection;
 uniform mat4 View;
@@ -13,13 +16,10 @@ uniform mat4 Model;
 void main()
 {
 
-	vNormal = Projection * 
-				  View * 
-				  Model * Normal;
-			  
 	vTexCoord = TexCoord;
+
+	vNormal 	 = Projection *  View *  Model * Normal;
+	gl_Position  = Projection *  View *  Model * Position; 	
 	
-	gl_Position = Projection * 
-				  View * 
-				  Model * Position; 
+	vShadowCoord = lightMatrix * Position;
 }

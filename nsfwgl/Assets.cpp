@@ -256,7 +256,7 @@ void nsfw::Assets::init()
 	
 	makeVAO("Cube", CubeVerts,24, CubeTris,36);
 	makeVAO("Quad", QuadVerts, 4, QuadTris, 6);
-	
+
 	unsigned char w[] = { 100, 0, 100,255 };
 	makeTexture("Magenta", 1, 1, GL_RGBA, w);
 

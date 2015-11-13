@@ -1,4 +1,4 @@
-﻿Build started 10/30/2015 2:32:35 PM.
+﻿Build started 11/5/2015 2:22:36 PM.
      1>Project "C:\Users\adrian.caple\Documents\GitHub\NSFWGL_Personal\defer\defer.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /IC:\Users\adrian.caple\Documents\GitHub\NSFWGL_Personal\dep /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt main.cpp
@@ -8,4 +8,4 @@
 
 Build FAILED.
 
-Time Elapsed 00:00:00.34
+Time Elapsed 00:00:00.38

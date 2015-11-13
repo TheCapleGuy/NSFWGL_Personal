@@ -124,6 +124,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CompositePass.cpp" />
     <ClCompile Include="ForwardPass.cpp" />
     <ClCompile Include="Main.cpp" />

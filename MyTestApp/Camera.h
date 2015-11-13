@@ -6,11 +6,12 @@
 struct Camera
 {
 	glm::mat4 m_transform;
+	float camSpeed = .1f;
 	float m_near, m_far, aspect, fov;
 
 	Camera() : m_near(1.f), m_far(100), aspect(800 / 600.f), fov(90) {}
 
-	void update() {}
+	void update();
 
 	void lookAt(glm::vec3 pos, glm::vec3 target, glm::vec3 up)
 	{

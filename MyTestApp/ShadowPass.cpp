@@ -12,7 +12,7 @@ void ShadowPass::prep()
 
 	glEnable(GL_DEPTH_TEST);
 
-	glViewport(0, 0, 512, 512); // Use window dimensions (w, h) 
+	glViewport(0, 0, 1024, 1024); // Use window dimensions (w, h) 
 	glClearColor(0.25f, 0.25f, 0.25f, 1);
 	glClear(GL_DEPTH_BUFFER_BIT);
 }
@@ -24,7 +24,7 @@ void ShadowPass::draw(const DirectionalLight &dLight, const GameObject &go)
 {
 	//setUniform("dLColor", nsfw::UNIFORM::FLO3, &(dLight.color));
 	//setUniform("dLDirection", nsfw::UNIFORM::FLO3, &(dLight.direction));
-	setUniform("lightMatrix", nsfw::UNIFORM::MAT4, glm::value_ptr(dLight.getMatrix()));
+	setUniform("LightMatrix", nsfw::UNIFORM::MAT4, glm::value_ptr(dLight.getMatrix()));
 
 	//Camera
 	//setUniform("Projection", nsfw::UNIFORM::MAT4, glm::value_ptr(c.getProjection()));

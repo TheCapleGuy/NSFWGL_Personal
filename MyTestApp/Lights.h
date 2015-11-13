@@ -5,6 +5,7 @@ struct DirectionalLight
 {
 	glm::vec3 direction;
 	glm::vec3 color;
+	float const dLCoefficient = 2.f;
 
 
 	glm::mat4 getView() const 
@@ -14,7 +15,7 @@ struct DirectionalLight
 
 	glm::mat4 getProjection() const
 	{
-		return glm::ortho<float>(-10, 10,-10, 10, -10, 10);
+		return glm::ortho<float>(-10, 10, -10, 10, -10, 10);
 	}
 
 	glm::mat4 getMatrix() const

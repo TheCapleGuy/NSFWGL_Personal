@@ -24,27 +24,34 @@ void ForwardPass::onPrep(const DirectionalLight &dLight)
 		0.0f, 0.5f, 0.0f, 0.0f,
 		0.0f, 0.0f, 0.5f, 0.0f,
 		0.5f, 0.5f, 0.5f, 1.0f
-		);
+		);
+
 	//lights
-	setUniform("dLColor", nsfw::UNIFORM::FLO3, &(dLight.color));
-	setUniform("dLDirection", nsfw::UNIFORM::FLO3, &(dLight.direction));
-	setUniform("lightMatrix", nsfw::UNIFORM::MAT4, glm::value_ptr(textureSpaceOffset * dLight.getMatrix()));
+	setUniform("dLColor", nsfw::UNIFORM::FLO3, glm::value_ptr((dLight.color)));
+	setUniform("dLDirection", nsfw::UNIFORM::FLO3, glm::value_ptr((dLight.direction)));
+	setUniform("LightMatrix", nsfw::UNIFORM::MAT4, glm::value_ptr(textureSpaceOffset * dLight.getMatrix()));
+	setUniform("dLCoefficient", nsfw::UNIFORM::FLO1, &dLight.dLCoefficient);
 }
 
 void ForwardPass::draw(const Camera &c, const GameObject &go)
 {
+	//ambient lighting
+
 	//Camera
 	setUniform("Projection", nsfw::UNIFORM::MAT4, glm::value_ptr(c.getProjection()));
 	setUniform("View", nsfw::UNIFORM::MAT4, glm::value_ptr(c.getView()));
+	setUniform("cameraPos", nsfw::UNIFORM::FLO3, glm::value_ptr(c.m_transform[3]));
 	//GameObject
 	setUniform("Model", nsfw::UNIFORM::MAT4, glm::value_ptr(go.transform));
 	setUniform("Diffuse", nsfw::UNIFORM::TEX2, &(go.diffuse), 0);
-	//setUniform("Specular", nsfw::UNIFORM::TEX2, &(go.diffuse), 1);
-	//setUniform("Normal", nsfw::UNIFORM::TEX2, &(go.diffuse), 2);
+	setUniform("Specular", nsfw::UNIFORM::TEX2, &(go.Specular), 1);
+	setUniform("SpecPow", nsfw::UNIFORM::FLO1, &go.specPow);
+	setUniform("Normal", nsfw::UNIFORM::TEX2, &(go.normal), 2);
 
 	nsfw::Asset<nsfw::ASSET::TEXTURE> shadowmap = "FINAL";
 
 	setUniform("ShadowMap", nsfw::UNIFORM::TEX2, &shadowmap, 1);
+	
 
 	glBindVertexArray(*go.mesh);
 	glDrawElements(GL_TRIANGLES, *go.tris, GL_UNSIGNED_INT, 0);

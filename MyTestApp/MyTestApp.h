@@ -11,7 +11,7 @@ class MyTestApp : public nsfw::Application
 {
 	Camera camera;
 	GameObject obj;
-	GameObject plane;
+	GameObject planes[4];
 	DirectionalLight dLight;
 	ForwardPass fp;
 	ShadowPass sp;

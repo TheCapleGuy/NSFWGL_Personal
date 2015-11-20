@@ -76,7 +76,7 @@ void MyTestApp::onStep()
 {
 	camera.update();
 
-	//moving camera for effect with shadow;
+	//moving light for effect with shadow;
 	float time = nsfw::Window::instance().getTime();
 	float wave = .5f * sin(time);
 	//std::cout << wave << std::endl;

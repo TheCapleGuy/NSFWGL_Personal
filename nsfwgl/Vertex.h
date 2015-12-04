@@ -5,6 +5,23 @@ using namespace glm;
 
 namespace nsfw
 {
+	//struct VertexParticle
+	//{
+	//	glm::vec4 position;
+	//	glm::vec4 normal;
+	//	glm::vec4 tangent;
+	//	glm::vec2 texCoord;
+
+	//	enum OFFSETS
+	//	{
+	//		POSITION = 0,
+	//		NORMAL = POSITION + sizeof(glm::vec4),
+	//		TANGENT = NORMAL + sizeof(glm::vec4),
+	//		TEXCOORD = TANGENT + sizeof(glm::vec4)
+	//	};
+	//};
+
+
 	struct Vertex
 	{
 		glm::vec4 position;

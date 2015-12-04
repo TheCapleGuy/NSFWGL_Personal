@@ -8,6 +8,10 @@ void MyTestApp::onInit()
 
 	a.loadShader("Shadow", "../resources/shaders/shadow.vert", "../resources/shaders/shadow.frag");
 
+	a.loadShader("Particle", "../resources/shaders/gpuParticle.vert", 
+							 "../resources/shaders/gpuParticle.geom",
+							 "../resources/shaders/gpuParticle.frag");
+
 	a.loadFBX("", "../resources/fbx/soulspear/soulspear.fbx");
 
 	a.loadTexture("RockDiffuse", "../resources/textures/rock_diffuse.tga");
@@ -19,7 +23,8 @@ void MyTestApp::onInit()
 
 	a.makeFBO("Shadow", 1024, 1024, 1, renderTargetNames, renderTargetDepths);
 
-
+	parEmit = new nsfw::ParticleEmitter();
+	parEmit->Init(100, 1, 10, 2, 15, 5, 20, glm::vec4(1), glm::vec4(.2f));
 
 	//light values on initialization
 	dLight.color     = glm::vec3(.8f, .6f, .4f);
@@ -62,11 +67,14 @@ void MyTestApp::onPlay()
 	}
 
 
-	fp.shader     = "Forward";
-	fp.fbo        = "Screen";
+	fp.shader = "Forward";
+	fp.fbo    = "Screen";
 
 	sp.shader = "Shadow";
-	sp.fbo = "Shadow";
+	sp.fbo    = "Shadow";
+
+	pp.shader = "Particle";
+	pp.fbo    = "Screen";
 	//fp.fbo    = "Screen"; //Default built-in
 
 	//cp.shader = "Basic";
@@ -100,6 +108,12 @@ void MyTestApp::onStep()
 	}
 	fp.post();
 
+	//pp.prep();
+	//pp.onPrep(parEmit);
+	//pp.draw(camera);
+	pp.post();
+
+
 	//cp.prep();
 	//cp.draw();
 	//cp.post();
@@ -107,5 +121,5 @@ void MyTestApp::onStep()
 
 void MyTestApp::onTerm()
 {
-
+	delete parEmit;
 }

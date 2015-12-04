@@ -1,5 +1,6 @@
 #include <ogl\gl_core_4_4.h>
 #include "nsfw.h"
+#include "ParticleEmitter.h"
 #include <iostream>
 #include <fstream>
 #include <fbx\FBXFile.h>
@@ -43,7 +44,6 @@ bool nsfw::Assets::setINTERNAL(ASSET::GL_HANDLE_TYPE t,const char *name, GL_HAND
 	return true;
 }
 
-
 bool nsfw::Assets::makeVAO(const char * name, const struct Vertex *verts, unsigned vsize,  const unsigned * tris, unsigned tsize)
 {
 	ASSET_LOG(GL_HANDLE_TYPE::VBO);
@@ -83,6 +83,61 @@ bool nsfw::Assets::makeVAO(const char * name, const struct Vertex *verts, unsign
 	setINTERNAL(GL_HANDLE_TYPE::IBO,  name, ibo);
 	setINTERNAL(GL_HANDLE_TYPE::VAO,  name, vao);
 	setINTERNAL(GL_HANDLE_TYPE::SIZE, name, size);
+
+	return true;
+}
+
+bool nsfw::Assets::makeVAO(const char * name, const struct ParticleEmitter *partemit)
+{
+	ASSET_LOG(GL_HANDLE_TYPE::VBO);
+	ASSET_LOG(GL_HANDLE_TYPE::VAO);
+	ASSET_LOG(GL_HANDLE_TYPE::SIZE);
+
+	unsigned vao[2], vbo[2];
+
+	glGenVertexArrays(2, vao);
+	glGenBuffers(2, vbo);
+
+	//    first buffer
+	glBindVertexArray(vao[0]);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
+	glBufferData(GL_ARRAY_BUFFER, partemit->mMaxParticles * sizeof(ParticleEmitter::Particle), partemit->mParticles, GL_STREAM_DRAW);
+
+	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(1);
+	glEnableVertexAttribArray(2);
+	glEnableVertexAttribArray(3);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(ParticleEmitter::Particle), 0);               //position
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(ParticleEmitter::Particle), ((char*)0) + 12); //velocity
+	glVertexAttribPointer(2, 1, GL_FLOAT, GL_FALSE, sizeof(ParticleEmitter::Particle), ((char*)0) + 24); //lifetime
+	glVertexAttribPointer(3, 1, GL_FLOAT, GL_FALSE, sizeof(ParticleEmitter::Particle), ((char*)0) + 28); //lifespan
+	//    first buffer
+
+	//    second buffer
+	glBindVertexArray(vao[1]);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
+	glBufferData(GL_ARRAY_BUFFER, partemit->mMaxParticles * sizeof(ParticleEmitter::Particle), 0, GL_STREAM_DRAW);
+
+	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(1);
+	glEnableVertexAttribArray(2);
+	glEnableVertexAttribArray(3);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(ParticleEmitter::Particle), 0);               //position
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(ParticleEmitter::Particle), ((char*)0) + 12); //velocity
+	glVertexAttribPointer(2, 1, GL_FLOAT, GL_FALSE, sizeof(ParticleEmitter::Particle), ((char*)0) + 24); //lifetime
+	glVertexAttribPointer(3, 1, GL_FLOAT, GL_FALSE, sizeof(ParticleEmitter::Particle), ((char*)0) + 28); //lifespan
+	//   second buffer
+
+	glBindVertexArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	//first buffer
+	setINTERNAL(GL_HANDLE_TYPE::VBO, name, vbo[0]);
+	setINTERNAL(GL_HANDLE_TYPE::VAO, name, vao[0]);
+	//second buffer
+	setINTERNAL(GL_HANDLE_TYPE::VBO, name, vbo[1]);
+	setINTERNAL(GL_HANDLE_TYPE::VAO, name, vao[1]);
 
 	return true;
 }
@@ -137,7 +192,7 @@ bool nsfw::Assets::makeTexture(const char * name, unsigned w, unsigned h, unsign
 	return true;
 }
 
-bool nsfw::Assets::loadTexture(const char * name, const char * path)
+unsigned int nsfw::Assets::loadTexture(const char * name, const char * path)
 {
 	int w, h, d;
 	unsigned char *p;
@@ -155,6 +210,35 @@ bool nsfw::Assets::loadTexture(const char * name, const char * path)
 	makeTexture(name, w,h,d,p);
 	stbi_image_free(p);
 
+	return true;
+}
+
+bool nsfw::Assets::loadShader(const char * name, const char * vpath)
+{
+	ASSET_LOG(GL_HANDLE_TYPE::SHADER);
+	GLuint shader = glCreateProgram();
+
+	std::ifstream vin(vpath);
+
+	std::string vcontents = std::string(
+		std::istreambuf_iterator<char>(vin),
+		std::istreambuf_iterator<char>());
+
+	const char *vs = vcontents.c_str();
+
+	GLuint vshader = glCreateShader(GL_VERTEX_SHADER);
+
+	glShaderSource(vshader, 1, &vs, 0);
+
+	glCompileShader(vshader);
+
+	glAttachShader(shader, vshader);
+
+	glLinkProgram(shader);
+
+	glDeleteShader(vshader);
+
+	setINTERNAL(GL_HANDLE_TYPE::SHADER, name, shader);
 	return true;
 }
 
@@ -196,6 +280,71 @@ bool nsfw::Assets::loadShader(const char * name, const char * vpath, const char 
 	
 	setINTERNAL(GL_HANDLE_TYPE::SHADER, name, shader);
 	return true;
+}
+
+bool nsfw::Assets::loadShader(const char * name, const char * vpath, const char * gpath, const char * fpath)
+{
+	ASSET_LOG(GL_HANDLE_TYPE::SHADER);
+	GLuint shader = glCreateProgram();
+
+	std::ifstream vin(vpath);
+
+	std::string vcontents = std::string(
+		std::istreambuf_iterator<char>(vin),
+		std::istreambuf_iterator<char>());
+
+	std::ifstream fin(fpath);
+	std::string fcontents = std::string(
+		std::istreambuf_iterator<char>(fin),
+		std::istreambuf_iterator<char>());
+
+	std::ifstream gin(gpath);
+
+	std::string gcontents = std::string(
+		std::istreambuf_iterator<char>(gin),
+		std::istreambuf_iterator<char>());
+
+	const char *vs = vcontents.c_str();
+	const char *fs = fcontents.c_str();
+	const char *gs = gcontents.c_str();
+
+	GLuint vshader = glCreateShader(GL_VERTEX_SHADER);
+	GLuint fshader = glCreateShader(GL_FRAGMENT_SHADER);
+	GLuint gshader = glCreateShader(GL_GEOMETRY_SHADER);
+
+	glShaderSource(vshader, 1, &vs, 0);
+	glShaderSource(fshader, 1, &fs, 0);
+	glShaderSource(gshader, 1, &gs, 0);
+
+	glCompileShader(vshader);
+	glCompileShader(fshader);
+	glCompileShader(gshader);
+
+	glAttachShader(shader, vshader);
+	glAttachShader(shader, fshader);
+	glAttachShader(shader, gshader);
+
+	glLinkProgram(shader);
+
+	glDeleteShader(vshader);
+	glDeleteShader(fshader);
+	glDeleteShader(gshader);
+
+	setINTERNAL(GL_HANDLE_TYPE::SHADER, name, shader);
+
+	return true;
+}
+
+bool nsfw::Assets::loadUpdateShader(const char * name, const char *vpath, const char * VarNames[], const int numVars)
+{
+	unsigned vs = loadShader(name, vpath);
+	//create program?? do that here? or before calling function?
+	//function doesnt need to know about the particle emitter. 
+	//function meant to update the shader before calling draw
+
+	glTransformFeedbackVaryings(get(SHADER,name), numVars, VarNames, GL_INTERLEAVED_ATTRIBS);
+	
+	return false;
 }
 
 bool nsfw::Assets::loadFBX(const char * name, const char * path)

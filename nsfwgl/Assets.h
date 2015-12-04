@@ -37,6 +37,7 @@
 		*** Implement the necessary LOAD and MAKE functions, as well as the TERM function.
 */
 
+
 namespace nsfw
 {
 	// Keep track of the type of handle
@@ -78,6 +79,8 @@ namespace nsfw
 	class Assets
 	{
 	private:
+		//forward decleration for particle system makeVAO
+		//class ParticleEmitter;
 		// Hashing functor object for accepting pair<enum,string> as an index.
 		struct Hash { size_t operator()(AssetKey k) const { return std::hash<std::string>()(k.second += (unsigned)k.first); } };
 		
@@ -114,6 +117,9 @@ namespace nsfw
 
 		// Should also allocate for IBO and VBO
 		bool makeVAO(const char *name, const struct Vertex *verts, unsigned vsize, const unsigned *tris, unsigned tsize);
+		
+		// should create a VAO and VBO for a particle emitter
+		bool makeVAO(const char * name, const struct ParticleEmitter *partemit);
 
 		// should call makeTexture nTextures number of times
 		bool makeFBO(const char *name, unsigned w, unsigned h, unsigned nTextures, const char *names[], const unsigned depths[]);
@@ -122,11 +128,20 @@ namespace nsfw
 		bool makeTexture(const char *name, unsigned w, unsigned h, unsigned depth, const unsigned char *pixels = nullptr);
 
 		// should load a texture from a file, use makeTexture to alloc, and then copy filedata in
-		bool loadTexture(const char *name, const char *path);
+		unsigned int loadTexture(const char *name, const char *path);
 	
 		// should load a shader from file
 		bool loadShader(const char *name, const char *vpath, const char *fpath);
+
+		// should load a shader from file for feedback shader to access vertex shader
+		bool loadShader(const char *name, const char *vpath);
+
+		// should load a shader from file for geometry shader
+		bool loadShader(const char *name, const char *vpath, const char *gpath, const char *fpath);
 	
+		// should load a update shader from file "Transform feedback"
+		bool loadUpdateShader(const char *name, const char *vpath, const char *VarNames[],const int numVars);
+		
 		// should load from an FBX, adding assets to the library as they are discovered
 		bool loadFBX(const char *name, const char *path);
 

@@ -37,3 +37,4 @@
 #include "render.h"
 #include "Application.h"
 #include "Vertex.h"
+#include "ParticleEmitter.h"

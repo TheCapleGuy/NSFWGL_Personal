@@ -106,12 +106,13 @@ void MyTestApp::onStep()
 	{
 		fp.draw(camera, planes[i]);
 	}
-	fp.post();
+
 
 	//pp.prep();
-	//pp.onPrep(parEmit);
-	//pp.draw(camera);
-	pp.post();
+	pp.onPrep(parEmit);
+	pp.draw(camera);
+	//pp.post();
+	fp.post();
 
 
 	//cp.prep();

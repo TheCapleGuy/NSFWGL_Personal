@@ -36,6 +36,8 @@ struct ParticleEmitter
 
 	unsigned mActiveBuffer, mUpdateShader, mDrawShader;
 
+	//nsfw::ASSET::VAO vao;
+
 	void Init(
 		unsigned aMaxParticles,
 		float aLifeSpanMin, float aLifeSpanMax,

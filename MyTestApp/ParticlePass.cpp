@@ -17,8 +17,12 @@ void ParticlePass::prep()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void ParticlePass::onPrep(const nsfw::ParticleEmitter *pEmit)
+void ParticlePass::onPrep(nsfw::ParticleEmitter *pEmit)
 {
+
+	glUseProgram(pEmit->mUpdateShader);
+
+	   
 	float dTime = nsfw::Window::instance().getTime();
 	setUniform("time", nsfw::UNIFORM::FLO1, &pEmit->time);
 	setUniform("deltaTime", nsfw::UNIFORM::FLO1, &dTime);
@@ -30,14 +34,18 @@ void ParticlePass::onPrep(const nsfw::ParticleEmitter *pEmit)
 	setUniform("colorEnd", nsfw::UNIFORM::FLO3, &pEmit->mEndColor);
 	setUniform("emitterPosition", nsfw::UNIFORM::FLO3, &pEmit->mPosition);
 
+	glEnable(GL_RASTERIZER_DISCARD);
+
+	glBindVertexArray(pEmit->);
+
+
 }
 
 void ParticlePass::draw(const Camera & c)
 {
 	setUniform("projectionView",nsfw::UNIFORM::MAT4, glm::value_ptr(c.getView()));
 	setUniform("cameraTransform", nsfw::UNIFORM::MAT4, glm::value_ptr(c.m_transform));
-
-	glEnable(GL_RASTERIZER_DISCARD);
+	
 
 }
 

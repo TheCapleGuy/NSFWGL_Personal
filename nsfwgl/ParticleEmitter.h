@@ -34,9 +34,12 @@ struct ParticleEmitter
 	float mStartSize, mEndSize;
 	float time;
 
-	unsigned mActiveBuffer, mUpdateShader, mDrawShader;
+	unsigned mActiveBuffer;//, mUpdateShader, mDrawShader;
 
-	//nsfw::ASSET::VAO vao;
+	//nsfw::Asset<ASSET::SHADER> update;
+	//nsfw::Asset<ASSET::SHADER> draw;
+	nsfw::Asset<ASSET::VAO> vao[2];
+	nsfw::Asset<ASSET::VBO> vbo[2];
 
 	void Init(
 		unsigned aMaxParticles,

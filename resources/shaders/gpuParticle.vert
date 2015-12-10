@@ -12,6 +12,7 @@ out float lifeSpan;
 void main()
 {
 	position = Position;
+	velocity = Velocity;
 	lifeTime = Lifetime;
 	lifeSpan = Lifespan;
 }

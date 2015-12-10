@@ -7,7 +7,7 @@
 void ParticlePass::prep()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, *fbo);
-	glUseProgram(*shader);
+	//glUseProgram(*shader);
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
@@ -17,12 +17,16 @@ void ParticlePass::prep()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void ParticlePass::onPrep(nsfw::ParticleEmitter *pEmit)
+void ParticlePass::onPrep()
 {
 
-	glUseProgram(pEmit->mUpdateShader);
+}
 
-	   
+void ParticlePass::draw(const Camera & c, nsfw::ParticleEmitter *pEmit)
+{
+	shader = "ParticleUpdate";
+	glUseProgram(*shader);
+
 	float dTime = nsfw::Window::instance().getTime();
 	setUniform("time", nsfw::UNIFORM::FLO1, &pEmit->time);
 	setUniform("deltaTime", nsfw::UNIFORM::FLO1, &dTime);
@@ -36,17 +40,28 @@ void ParticlePass::onPrep(nsfw::ParticleEmitter *pEmit)
 
 	glEnable(GL_RASTERIZER_DISCARD);
 
-	glBindVertexArray(pEmit->);
+	glBindVertexArray(*pEmit->vao[pEmit->mActiveBuffer]);
 
+	unsigned otherBuffer = (pEmit->mActiveBuffer + 1) % 2;
 
-}
+	glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, *pEmit->vbo[otherBuffer]);
+	glBeginTransformFeedback(GL_POINTS);
+	glDrawArrays(GL_POINTS, 0, pEmit->mMaxParticles);
 
-void ParticlePass::draw(const Camera & c)
-{
+	glEndTransformFeedback();
+	glDisable(GL_RASTERIZER_DISCARD);
+	glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, 0);
+
+	shader = "ParticleDraw";
+	glUseProgram(*shader);
+
 	setUniform("projectionView",nsfw::UNIFORM::MAT4, glm::value_ptr(c.getView()));
 	setUniform("cameraTransform", nsfw::UNIFORM::MAT4, glm::value_ptr(c.m_transform));
 	
+	glBindVertexArray(*pEmit->vao[otherBuffer]);
+	glDrawArrays(GL_POINTS, 0, pEmit->mMaxParticles);
 
+	pEmit->mActiveBuffer = otherBuffer;
 }
 
 void ParticlePass::post()

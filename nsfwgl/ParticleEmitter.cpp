@@ -3,7 +3,7 @@
 
 nsfw::ParticleEmitter::ParticleEmitter() :
 	mParticles(nullptr), mMaxParticles(0),
-	mPosition(0), time(0)
+	mPosition(0), time(0), mActiveBuffer(0)
 {
 
 }
@@ -32,6 +32,9 @@ void nsfw::ParticleEmitter::Init(
 	mEndColor     = aEndColor;
 
 	mParticles = new Particle[mMaxParticles];
+
+	//mUpdateShader = nsfw::Assets::instance().get<nsfw::ASSET::SHADER>("ParticleUpdate");
+	//mDrawShader   = nsfw::Assets::instance().get<nsfw::ASSET::SHADER>("ParticleDraw");
 }
 
 void nsfw::ParticleEmitter::Particle::update()

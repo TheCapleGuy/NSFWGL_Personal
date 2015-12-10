@@ -87,7 +87,7 @@ bool nsfw::Assets::makeVAO(const char * name, const struct Vertex *verts, unsign
 	return true;
 }
 
-bool nsfw::Assets::makeVAO(const char * name, const struct ParticleEmitter *partemit)
+bool nsfw::Assets::makeVAO(const char * name, struct ParticleEmitter *partemit)
 {
 	ASSET_LOG(GL_HANDLE_TYPE::VBO);
 	ASSET_LOG(GL_HANDLE_TYPE::VAO);
@@ -133,11 +133,21 @@ bool nsfw::Assets::makeVAO(const char * name, const struct ParticleEmitter *part
 	glBindVertexArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	//first buffer
-	setINTERNAL(GL_HANDLE_TYPE::VBO, name, vbo[0]);
-	setINTERNAL(GL_HANDLE_TYPE::VAO, name, vao[0]);
+	std::string name1 = name; name1 += '0';
+	std::string name2 = name; name2 += '1';
+
+	setINTERNAL(GL_HANDLE_TYPE::VBO, name1.c_str(), vbo[0]);
+	setINTERNAL(GL_HANDLE_TYPE::VAO, name1.c_str(), vao[0]);
 	//second buffer
-	setINTERNAL(GL_HANDLE_TYPE::VBO, name, vbo[1]);
-	setINTERNAL(GL_HANDLE_TYPE::VAO, name, vao[1]);
+	setINTERNAL(GL_HANDLE_TYPE::VBO, name2.c_str(), vbo[1]);
+	setINTERNAL(GL_HANDLE_TYPE::VAO, name2.c_str(), vao[1]);
+
+	partemit->vao[0] = name1.c_str();
+	partemit->vbo[0] = name1.c_str();
+
+	partemit->vao[1] = name2.c_str();
+	partemit->vbo[1] = name2.c_str();
+	
 
 	return true;
 }

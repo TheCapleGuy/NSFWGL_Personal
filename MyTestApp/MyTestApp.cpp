@@ -6,11 +6,14 @@ void MyTestApp::onInit()
 	a.loadShader("Forward", "../resources/shaders/basic.vert",
 							"../resources/shaders/basic.frag");
 
-	a.loadShader("Shadow", "../resources/shaders/shadow.vert", "../resources/shaders/shadow.frag");
+	a.loadShader("Shadow", "../resources/shaders/shadow.vert", 
+						   "../resources/shaders/shadow.frag");
 
-	a.loadShader("Particle", "../resources/shaders/gpuParticle.vert", 
-							 "../resources/shaders/gpuParticle.geom",
-							 "../resources/shaders/gpuParticle.frag");
+	a.loadShader("ParticleDraw", "../resources/shaders/gpuParticle.vert", 
+								 "../resources/shaders/gpuParticle.geom",
+								 "../resources/shaders/gpuParticle.frag");
+
+	a.loadShader("ParticleUpdate", "../resources/shaders/gpuParticleUpdate.vert");
 
 	a.loadFBX("", "../resources/fbx/soulspear/soulspear.fbx");
 
@@ -24,7 +27,9 @@ void MyTestApp::onInit()
 	a.makeFBO("Shadow", 1024, 1024, 1, renderTargetNames, renderTargetDepths);
 
 	parEmit = new nsfw::ParticleEmitter();
-	parEmit->Init(100, 1, 10, 2, 15, 5, 20, glm::vec4(1), glm::vec4(.2f));
+	parEmit->Init(100000, .1f, 5.0f, 5.f, 20.f, 1.f, .1f, glm::vec4(1,0,0,1), glm::vec4(1,1,0,1));
+
+	a.makeVAO("ParticleVAO", parEmit);
 
 	//light values on initialization
 	dLight.color     = glm::vec3(.8f, .6f, .4f);
@@ -73,8 +78,8 @@ void MyTestApp::onPlay()
 	sp.shader = "Shadow";
 	sp.fbo    = "Shadow";
 
-	pp.shader = "Particle";
-	pp.fbo    = "Screen";
+	//pp.shader = "Particle";
+	pp.fbo    = "ParticleVAO";
 	//fp.fbo    = "Screen"; //Default built-in
 
 	//cp.shader = "Basic";
@@ -109,8 +114,7 @@ void MyTestApp::onStep()
 
 
 	//pp.prep();
-	pp.onPrep(parEmit);
-	pp.draw(camera);
+	pp.draw(camera, parEmit);
 	//pp.post();
 	fp.post();
 

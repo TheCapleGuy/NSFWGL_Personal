@@ -119,7 +119,7 @@ namespace nsfw
 		bool makeVAO(const char *name, const struct Vertex *verts, unsigned vsize, const unsigned *tris, unsigned tsize);
 		
 		// should create a VAO and VBO for a particle emitter
-		bool makeVAO(const char * name, const struct ParticleEmitter *partemit);
+		bool makeVAO(const char * name, struct ParticleEmitter *partemit);
 
 		// should call makeTexture nTextures number of times
 		bool makeFBO(const char *name, unsigned w, unsigned h, unsigned nTextures, const char *names[], const unsigned depths[]);

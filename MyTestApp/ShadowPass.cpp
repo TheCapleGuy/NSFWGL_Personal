@@ -42,6 +42,8 @@ void ShadowPass::draw(const DirectionalLight &dLight, const GameObject &go)
 
 void ShadowPass::post()
 {
-	glDisable(GL_CULL_FACE);			  glDisable(GL_DEPTH_TEST);
-	glBindFramebuffer(GL_FRAMEBUFFER, 0); glUseProgram(0);
+	glDisable(GL_CULL_FACE);			  
+	glDisable(GL_DEPTH_TEST);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0); 
+	glUseProgram(0);
 }

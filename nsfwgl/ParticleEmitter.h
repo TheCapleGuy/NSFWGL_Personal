@@ -35,11 +35,18 @@ struct ParticleEmitter
 	float time;
 
 	unsigned mActiveBuffer;//, mUpdateShader, mDrawShader;
+	unsigned int mVAO[2];
+	unsigned int mVBO[2];
+	unsigned int mDrawShader;
+	unsigned int mUpdateShader;
+	float mLastDrawTime;
 
 	//nsfw::Asset<ASSET::SHADER> update;
 	//nsfw::Asset<ASSET::SHADER> draw;
-	nsfw::Asset<ASSET::VAO> vao[2];
-	nsfw::Asset<ASSET::VBO> vbo[2];
+	//nsfw::Asset<ASSET::VAO> vao[2];
+	//nsfw::Asset<ASSET::VBO> vbo[2];
+
+
 
 	void Init(
 		unsigned aMaxParticles,
@@ -50,7 +57,12 @@ struct ParticleEmitter
 
 	void emit();
 	void update();
+	void draw(float time, const glm::mat4 & a_cameraTransform, glm::mat4 & a_projectionView);
 	void draw();
+	void CreateBuffers();
+	void CreateUpdateShader();
+	unsigned int LoadShader(unsigned int type, const char * path);
+	void CreateDrawShader();
 };
 
 };

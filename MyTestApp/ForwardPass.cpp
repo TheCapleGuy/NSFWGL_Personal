@@ -57,6 +57,11 @@ void ForwardPass::draw(const Camera &c, const GameObject &go)
 	glDrawElements(GL_TRIANGLES, *go.tris, GL_UNSIGNED_INT, 0);
 }
 
+void ForwardPass::draw(const Camera & c, nsfw::ParticleEmitter & emitter)
+{
+	emitter.draw(nsfw::Window::instance().getTime(), c.m_transform, c.getProjection());
+}
+
 void ForwardPass::post()
 {
 	glDisable(GL_CULL_FACE);			  glDisable(GL_DEPTH_TEST); 

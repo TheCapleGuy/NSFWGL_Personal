@@ -6,14 +6,14 @@ layout(triangle_strip, max_vertices = 4) out;
 
 //input data from vertex shader
 in vec3 position[];
-in float lifetime[];
-in float lifespan[];
+in float lifeTime[];
+in float lifeSpan[];
 
 //output to fragment shader
-out vec4 color;
+out vec4 Color;
 
 uniform mat4 projectionView;
-uniform met4 camreaTransform;
+uniform mat4 cameraTransform;
 
 uniform float sizeStart;
 uniform float sizeEnd;
@@ -24,10 +24,10 @@ uniform vec4 colorEnd;
 void main()
 {
 	//interpolate color
-	color mix(colorStart, colorEnd, lifetime[0] / lifespan[0]);
+	Color = mix(colorStart, colorEnd, lifeTime[0] / lifeSpan[0]);
 	
 	//calculate the size and create the corners of a quad
-	float halfSize = mix(sizeStart, sizeEnd, lifetime[0]/lifespan[0]) * .5f;
+	float halfSize = mix(sizeStart, sizeEnd, lifeTime[0]/lifeSpan[0]) * .5f;
 	
 	vec3 corners[4];
 	corners[0] = vec3(halfSize, -halfSize, 0);

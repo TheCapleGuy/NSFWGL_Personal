@@ -9,11 +9,11 @@ void MyTestApp::onInit()
 	a.loadShader("Shadow", "../resources/shaders/shadow.vert", 
 						   "../resources/shaders/shadow.frag");
 
-	a.loadShader("ParticleDraw", "../resources/shaders/gpuParticle.vert", 
+	/*a.loadShader("ParticleDraw", "../resources/shaders/gpuParticle.vert", 
 								 "../resources/shaders/gpuParticle.geom",
-								 "../resources/shaders/gpuParticle.frag");
+								 "../resources/shaders/gpuParticle.frag");*/
 
-	a.loadShader("ParticleUpdate", "../resources/shaders/gpuParticleUpdate.vert");
+	//a.loadShader("ParticleUpdate", "../resources/shaders/gpuParticleUpdate.vert");
 
 	a.loadFBX("", "../resources/fbx/soulspear/soulspear.fbx");
 
@@ -27,9 +27,14 @@ void MyTestApp::onInit()
 	a.makeFBO("Shadow", 1024, 1024, 1, renderTargetNames, renderTargetDepths);
 
 	parEmit = new nsfw::ParticleEmitter();
-	parEmit->Init(100000, .1f, 5.0f, 5.f, 20.f, 1.f, .1f, glm::vec4(1,0,0,1), glm::vec4(1,1,0,1));
+	parEmit->Init(1000, //MaxParticles
+		.1f, 5.0f, //LifeSpan
+		5.f, 20.f,// Velocity
+		1.f,.1f,//size
+		glm::vec4(1,0,0,1), glm::vec4(1,1,0,1)//color
+		);
 
-	a.makeVAO("ParticleVAO", parEmit);
+	//a.makeVAO("ParticleVAO", parEmit);
 
 	//light values on initialization
 	dLight.color     = glm::vec3(.8f, .6f, .4f);
@@ -79,7 +84,7 @@ void MyTestApp::onPlay()
 	sp.fbo    = "Shadow";
 
 	//pp.shader = "Particle";
-	pp.fbo    = "ParticleVAO";
+	//pp.fbo    = "ParticleVAO";
 	//fp.fbo    = "Screen"; //Default built-in
 
 	//cp.shader = "Basic";
@@ -94,7 +99,7 @@ void MyTestApp::onStep()
 	float wave = .5f * sin(time);
 	//std::cout << wave << std::endl;
 	dLight.direction.x = wave;
-
+	
 	sp.prep();
 	sp.draw(dLight, obj);
 	for (int i = 0; i < 4; i++)
@@ -103,7 +108,7 @@ void MyTestApp::onStep()
 	}
 
 	sp.post();
-
+	/**/
 	fp.prep();
 	fp.onPrep(dLight);
 	fp.draw(camera, obj);
@@ -111,10 +116,10 @@ void MyTestApp::onStep()
 	{
 		fp.draw(camera, planes[i]);
 	}
-
+	fp.draw(camera, *parEmit);
 
 	//pp.prep();
-	pp.draw(camera, parEmit);
+	//pp.draw(camera, parEmit);
 	//pp.post();
 	fp.post();
 

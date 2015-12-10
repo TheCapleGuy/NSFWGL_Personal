@@ -13,6 +13,8 @@ public:
 
 	void draw(const Camera &c, const GameObject &go);
 
+	void draw(const Camera &c, nsfw::ParticleEmitter& emitter);
+
 	void post();
 
 };

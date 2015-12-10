@@ -24,7 +24,9 @@ void ParticlePass::onPrep()
 
 void ParticlePass::draw(const Camera & c, nsfw::ParticleEmitter *pEmit)
 {
+	/*
 	shader = "ParticleUpdate";
+	unsigned s = *shader;
 	glUseProgram(*shader);
 
 	float dTime = nsfw::Window::instance().getTime();
@@ -62,6 +64,7 @@ void ParticlePass::draw(const Camera & c, nsfw::ParticleEmitter *pEmit)
 	glDrawArrays(GL_POINTS, 0, pEmit->mMaxParticles);
 
 	pEmit->mActiveBuffer = otherBuffer;
+	*/
 }
 
 void ParticlePass::post()

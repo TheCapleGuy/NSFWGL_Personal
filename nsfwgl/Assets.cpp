@@ -87,6 +87,7 @@ bool nsfw::Assets::makeVAO(const char * name, const struct Vertex *verts, unsign
 	return true;
 }
 
+/*
 bool nsfw::Assets::makeVAO(const char * name, struct ParticleEmitter *partemit)
 {
 	ASSET_LOG(GL_HANDLE_TYPE::VBO);
@@ -151,7 +152,7 @@ bool nsfw::Assets::makeVAO(const char * name, struct ParticleEmitter *partemit)
 
 	return true;
 }
-
+*/
 bool nsfw::Assets::makeFBO(const char * name, unsigned w, unsigned h, unsigned nTextures, const char * names[], const unsigned depths[])
 {
 	ASSET_LOG(GL_HANDLE_TYPE::FBO);

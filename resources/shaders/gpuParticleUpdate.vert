@@ -1,4 +1,4 @@
-version #410
+#version 410
 
 layout(location = 0) in vec3 Position;
 layout(location = 1) in vec3 Velocity;
@@ -9,7 +9,7 @@ uniform float time;
 uniform float deltaTime;
 uniform float lifeMin;
 uniform float lifeMax;
-uniform float emitterPosition;
+uniform vec3 emitterPosition;
 
 out vec3 position;
 out vec3 velocity;
@@ -32,9 +32,10 @@ void main()
 	position = Position + Velocity * deltaTime;
 	velocity = Velocity;
 	lifetime = Lifetime + deltaTime;
-	lifespan = Lifespan;
+	lifeSpan = Lifespan;
 	// emit a new particle as soon as it dies
-	if (lifetime > lifespan) {
+	if (lifetime > lifeSpan) 
+	{
 		uint seed = uint(time * 1000.0) + uint(gl_VertexID);
 		velocity.x = rand(seed++, 2) - 1;
 		velocity.y = rand(seed++, 2) - 1;
@@ -42,6 +43,6 @@ void main()
 		velocity = normalize(velocity);
 		position = emitterPosition;
 		lifetime = 0;
-		lifespan = rand(seed++, lifeMax - lifeMin) + lifeMin;
+		lifeSpan = rand(seed++, lifeMax - lifeMin) + lifeMin;
 	}
 }

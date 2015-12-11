@@ -6,7 +6,7 @@
 struct Camera
 {
 	glm::mat4 m_transform;
-	float camSpeed = .1f;
+	float camSpeed = .05f;
 	float m_near, m_far, aspect, fov;
 
 	Camera() : m_near(1.f), m_far(100), aspect(800 / 600.f), fov(90) {}

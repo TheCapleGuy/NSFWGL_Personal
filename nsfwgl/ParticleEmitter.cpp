@@ -1,9 +1,10 @@
 //#include "ParticleEmitter.h"
 #include "nsfw.h"
+#include <math.h>
 
 nsfw::ParticleEmitter::ParticleEmitter() :
 	mParticles(nullptr), mMaxParticles(0),
-	mPosition(0), time(0), mActiveBuffer(0)
+	mPosition(0,0,0), time(0), mActiveBuffer(0)
 {
 	mVAO[0] = 0;
 	mVAO[1] = 0;
@@ -60,6 +61,7 @@ void nsfw::ParticleEmitter::emit()
 void nsfw::ParticleEmitter::update()
 {
 	float dTime = nsfw::Window::instance().getTime();
+	//mPosition.x = cos(dTime);
 	time += dTime;
 	emit();
 }

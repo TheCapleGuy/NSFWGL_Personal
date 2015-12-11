@@ -41,16 +41,18 @@ void main()
 	vec3 yAxis = cross(zAxis, xAxis);
 	mat3 billboard = mat3(xAxis, yAxis, zAxis);
 	
+	//billboard = mat3(1);
+	
 	//emit the 4 vertices for the quad
-	gl_Position = projectionView * vec4(billboard * corners[0]+position[0], 1);
+	gl_Position = projectionView * vec4(billboard * corners[0] + position[0], 1);
 	EmitVertex();
 	
-	gl_Position = projectionView*vec4(billboard*corners[1]+position[0], 1);
+	gl_Position = projectionView * vec4(billboard * corners[1] + position[0], 1);
 	EmitVertex(); 
 	
-	gl_Position = projectionView*vec4(billboard*corners[2]+position[0], 1);
+	gl_Position = projectionView * vec4(billboard * corners[2] + position[0], 1);
 	EmitVertex();
 	
-	gl_Position = projectionView*vec4(billboard*corners[3]+position[0], 1);
+	gl_Position = projectionView * vec4(billboard * corners[3] + position[0], 1);
 	EmitVertex();
 }

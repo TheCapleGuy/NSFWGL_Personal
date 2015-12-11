@@ -27,11 +27,11 @@ void MyTestApp::onInit()
 	a.makeFBO("Shadow", 1024, 1024, 1, renderTargetNames, renderTargetDepths);
 
 	parEmit = new nsfw::ParticleEmitter();
-	parEmit->Init(1000, //MaxParticles
+	parEmit->Init(50000, //MaxParticles
 		.1f, 5.0f, //LifeSpan
-		5.f, 20.f,// Velocity
-		1.f,.1f,//size
-		glm::vec4(1,0,0,1), glm::vec4(1,1,0,1)//color
+		5.f, 20.f, // Velocity
+		1.f,.1f,   //size
+		glm::vec4(1,0,1,1), glm::vec4(1,1,1,1)//color
 		);
 
 	//a.makeVAO("ParticleVAO", parEmit);
@@ -96,10 +96,18 @@ void MyTestApp::onStep()
 
 	//moving light for effect with shadow;
 	float time = nsfw::Window::instance().getTime();
-	float wave = .5f * sin(time);
+	float sinewave = .5f * sin(time);
+
+	float particleSinWave = sinewave * 10;
+	float cosinewave = 5.f * cos(time);
+	float Sinewave = 5.f * sin(time);
 	//std::cout << wave << std::endl;
-	dLight.direction.x = wave;
-	
+	dLight.direction.x = sinewave;
+
+	parEmit->mPosition.z = Sinewave;
+	parEmit->mPosition.x = cosinewave;
+	parEmit->mPosition.y = 3;
+
 	sp.prep();
 	sp.draw(dLight, obj);
 	for (int i = 0; i < 4; i++)
